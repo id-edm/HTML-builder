@@ -3,28 +3,27 @@ const path = require('path');
 const route = path.join(__dirname, 'secret-folder');
 
 fs.readdir(route, (err, files) => {
-    if (err) {
+  if (err) {
+    throw err;
+  }
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const filePath = path.join(route, file);
+
+    fs.stat(filePath, (err, stat) => {
+      if (err) {
         throw err;
-    }
+      }
 
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const filePath = path.join(route, file);
+      if (stat.isFile()) {
+        const arr = files[i].split('.');
+        const fileName = arr.slice(0, arr.length - 1).join('.') + '';
+        const extensionName = path.extname(files[i]).split('.').join('');
+        const sizeFile = (stat.size / 1024).toFixed(3) + 'kb';
 
-        fs.stat(filePath, (err, stat) => {
-            if (err) {
-                throw err;
-            }
-
-            if (stat.isFile()) {
-
-                const arr = files[i].split('.');
-                const fileName = arr.slice(0, (arr.length - 1)).join('.') + '';
-                const extensionName = path.extname(files[i]).split('.').join('');
-                const sizeFile = (stat.size / 1024).toFixed(3) + 'kb';
-
-                console.log(fileName, '-', extensionName, '-', sizeFile)
-            }
-        });
-    }
+        console.log(fileName, '-', extensionName, '-', sizeFile);
+      }
+    });
+  }
 });
