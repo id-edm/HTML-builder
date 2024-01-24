@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
-const route = path.join(__dirname, '02-write-file');
+const route = path.join(__dirname, '02-write-file.txt');
 
 const { stdin: input, stdout: output } = require('process');
 
