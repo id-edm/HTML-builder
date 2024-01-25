@@ -8,12 +8,17 @@ async function copyFiles() {
   try {
     await fs.mkdir(newFolder, { recursive: true }); // cоздаем целевую папку, используя fs.mkdir с опцией recursive: true.
 
-    const files = await fs.readdir(folder); // получаем список файлов в исходной папке с помощью fs.readdir.
-    // копирование файлов
+    const files = await fs.readdir(folder, { withFileTypes: true });
+    // проходим по каждому элементу (файлу или папке) в исходной папке
     for (const file of files) {
-      const sourcePath = path.join(folder, file);
-      const destPath = path.join(newFolder, file);
-      await fs.copyFile(sourcePath, destPath);
+      // формируем пути к исходному и целевому файлам
+      const sourcePath = path.join(folder, file.name);
+      const destPath = path.join(newFolder, file.name);
+      // проверяем, является ли текущий элемент файлом
+      if (file.isFile()) {
+        // если текущий элемент - файл, копируем его из исходной папки в целевую
+        await fs.copyFile(sourcePath, destPath);
+      }
     }
     // проверка и удаление лишних файлов в целевой папке
     const newFiles = await fs.readdir(newFolder);
