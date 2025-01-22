@@ -3,6 +3,12 @@ const path = require('path');
 const readline = require('readline');
 const route = path.join(__dirname, '02-write-file.txt');
 
+fs.writeFile(route, '', (err) => {
+	if (err) {
+		throw err;
+	}
+});
+
 const { stdin: input, stdout: output } = require('process');
 
 const rl = readline.createInterface({ input, output });
